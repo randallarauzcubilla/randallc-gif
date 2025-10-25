@@ -1,6 +1,8 @@
 ﻿#include "pch.h"
 #include "ArbolUsuarios.h"
 #include <map>
+#include <fstream>
+#include <sstream>
 
 ArbolUsuarios::ArbolUsuarios() : raiz(nullptr) {}
 
@@ -95,24 +97,41 @@ void ArbolUsuarios::recorrerPostOrden(Usuario* nodo, std::function<void(Usuario*
 }
 
 void ArbolUsuarios::mostrarInOrden() {
+    if (!raiz) {
+        std::cout << "No hay usuarios registrados.\n";
+        return;
+    }
     recorrerInOrden(raiz, [](Usuario* u) {
         std::cout << u->id << " - " << u->nombre << " - " << u->edad << " anios " << u->saldo << " colones.\n";
         });
 }
 
 void ArbolUsuarios::mostrarPreOrden() {
+    if (!raiz) {
+        std::cout << "No hay usuarios registrados.\n";
+        return;
+    }
     recorrerPreOrden(raiz, [](Usuario* u) {
         std::cout << u->id << " - " << u->nombre << "\n";
         });
 }
 
 void ArbolUsuarios::mostrarPostOrden() {
+    if (!raiz) {
+        std::cout << "No hay usuarios registrados.\n";
+        return;
+    }
     recorrerPostOrden(raiz, [](Usuario* u) {
         std::cout << u->id << " - " << u->nombre << "\n";
         });
 }
 
 void ArbolUsuarios::mostrarOrdenadosPorNombre() {
+    if (!raiz) {
+        std::cout << "No hay usuarios registrados.\n";
+        return;
+    }
+
     std::map<std::string, Usuario*> mapa;
     recorrerInOrden(raiz, [&](Usuario* u) {
         mapa[u->nombre] = u;
@@ -123,4 +142,51 @@ void ArbolUsuarios::mostrarOrdenadosPorNombre() {
         Usuario* u = par.second;
         std::cout << u->id << " - " << u->nombre << " - " << u->edad << " anios - saldo: " << u->saldo << " colones.\n";
     }
+}
+
+void ArbolUsuarios::guardarEnArchivo(const std::string& nombreArchivo) {
+    std::ofstream archivo(nombreArchivo);
+    if (!archivo.is_open()) {
+        std::cout << "No se pudo abrir el archivo para guardar.\n";
+        return;
+    }
+
+    recorrerInOrden(raiz, [&](Usuario* u) {
+        archivo << u->id << "," << u->nombre << "," << u->edad << "," << u->saldo << "\n";
+        });
+
+    archivo.close();
+}
+
+void ArbolUsuarios::cargarDesdeArchivo(const std::string& nombreArchivo) {
+    std::ifstream archivo(nombreArchivo);
+    if (!archivo.is_open()) {
+        std::cout << "No se pudo abrir el archivo de usuarios.\n";
+        return;
+    }
+
+    std::string linea;
+    while (std::getline(archivo, linea)) {
+        std::stringstream ss(linea);
+        std::string idStr, nombre, edadStr, saldoStr;
+        int id, edad;
+        float saldo;
+
+        std::getline(ss, idStr, ',');
+        std::getline(ss, nombre, ',');
+        std::getline(ss, edadStr, ',');
+        std::getline(ss, saldoStr);
+
+        try {
+            id = std::stoi(idStr);
+            edad = std::stoi(edadStr);
+            saldo = std::stof(saldoStr);
+            insertarUsuario(id, nombre, edad, saldo);
+        }
+        catch (...) {
+            std::cout << "Error al leer usuario: " << linea << "\n";
+        }
+    }
+
+    archivo.close();
 }
