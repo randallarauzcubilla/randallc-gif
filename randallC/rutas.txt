@@ -1,0 +1,14 @@
+SanJose,Heredia,15
+SanJose,Alajuela,20
+Heredia,Cartago,30
+Cartago,Alajuela,25
+SanJose,Cartago,35
+Heredia,Alajuela,18
+Alajuela,SanPedro,22
+SanPedro,Cartago,28
+SanJose,SanPedro,40
+SanPedro,Heredia,16
+Cartago,SanRamon,42
+SanRamon,Alajuela,33
+SanJose,Limon,65
+Puntarenas,SanJose,70
