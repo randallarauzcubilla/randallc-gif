@@ -26,6 +26,8 @@ public:
     void mostrarPreOrden();
     void mostrarPostOrden();
     void mostrarOrdenadosPorNombre();
+    void guardarEnArchivo(const std::string& nombreArchivo);
+    void cargarDesdeArchivo(const std::string& nombreArchivo);
 };
 
 #endif
