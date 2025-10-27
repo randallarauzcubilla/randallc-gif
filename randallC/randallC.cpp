@@ -3,11 +3,16 @@ using namespace System;
 #include "ArbolUsuarios.h"
 #include "GrafoRutas.h"
 #include <iostream>
-
+#include <fstream>
+#include <sstream>
+#include <algorithm>
 
 // Declaraciones antes del main
 void menuUsuarios(ArbolUsuarios& arbol);
 void menuRutas(GrafoRutas& grafo);
+void generarReporte(ArbolUsuarios& arbol, GrafoRutas& grafo);
+bool esNumero(const std::string& texto);
+bool esDecimal(const std::string& texto);
 
 int main() {
     ArbolUsuarios arbol;
@@ -21,6 +26,7 @@ int main() {
         std::cout << "\n--- MENU PRINCIPAL ---\n";
         std::cout << "1. Gestionar usuarios\n";
         std::cout << "2. Consultar rutas\n";
+        std::cout << "3. Generar reporte\n";
         std::cout << "0. Salir\n";
         std::cout << "Opcion: ";
         std::cin >> opcionPrincipal;
@@ -31,6 +37,9 @@ int main() {
             break;
         case 2:
             menuRutas(grafo);
+            break;
+        case 3:
+            generarReporte(arbol, grafo);
             break;
         case 0:
             std::cout << "Saliendo del programa...\n";
@@ -60,16 +69,37 @@ void menuUsuarios(ArbolUsuarios& arbol) {
 
         switch (opcion) {
         case 1: {
+            std::string idStr, edadStr, saldoStr, nombre;
             int id, edad;
             float saldo;
-            std::string nombre;
 
-            std::cout << "ID: "; std::cin >> id;
+            std::cout << "ID: ";
+            std::cin >> idStr;
+            if (!esNumero(idStr)) {
+                std::cout << "ID invalido: debe contener solo numeros.\n";
+                break;
+            }
+            id = std::stoi(idStr);
+
             std::cout << "Nombre: ";
             std::cin.ignore();
             std::getline(std::cin, nombre);
-            std::cout << "Edad: "; std::cin >> edad;
-            std::cout << "Saldo: "; std::cin >> saldo;
+
+            std::cout << "Edad: ";
+            std::cin >> edadStr;
+            if (!esNumero(edadStr)) {
+                std::cout << "Edad invalida: debe contener solo numeros.\n";
+                break;
+            }
+            edad = std::stoi(edadStr);
+
+            std::cout << "Saldo: ";
+            std::cin >> saldoStr;
+            if (!esDecimal(saldoStr)) {
+                std::cout << "Saldo invalido: debe ser numerico.\n";
+                break;
+            }
+            saldo = std::stof(saldoStr);
 
             arbol.insertarUsuario(id, nombre, edad, saldo);
             break;
@@ -182,4 +212,31 @@ void menuRutas(GrafoRutas& grafo) {
         default: std::cout << "Opcion invalida.\n"; break;
         }
     } while (opcion != 0);
+}
+
+void generarReporte(ArbolUsuarios& arbol, GrafoRutas& grafo) {
+    std::ofstream archivo("reportes.txt");
+    if (!archivo.is_open()) {
+        std::cout << "No se pudo crear el archivo de reporte.\n";
+        return;
+    }
+
+    archivo << "=== REPORTE DE USUARIOS ===\n";
+    arbol.exportarOrdenadosPorNombre(archivo);
+
+    archivo << "\n=== MATRIZ DE RUTAS ===\n";
+    grafo.imprimirMatrizAdyacencia(archivo);
+
+    archivo.close();
+    std::cout << "Reporte generado en reportes.txt\n";
+}
+
+bool esNumero(const std::string& texto) {
+    return !texto.empty() && std::all_of(texto.begin(), texto.end(), ::isdigit);
+}
+
+bool esDecimal(const std::string& texto) {
+    return !texto.empty() && std::all_of(texto.begin(), texto.end(), [](char c) {
+        return ::isdigit(c) || c == '.';
+        });
 }
