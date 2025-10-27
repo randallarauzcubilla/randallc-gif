@@ -28,6 +28,7 @@ public:
     void mostrarOrdenadosPorNombre();
     void guardarEnArchivo(const std::string& nombreArchivo);
     void cargarDesdeArchivo(const std::string& nombreArchivo);
+    void exportarOrdenadosPorNombre(std::ostream& out);
 };
 
 #endif

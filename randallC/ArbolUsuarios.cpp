@@ -19,6 +19,25 @@ void ArbolUsuarios::insertar(Usuario*& nodo, Usuario* nuevo) {
 }
 
 void ArbolUsuarios::insertarUsuario(int id, std::string nombre, int edad, float saldo) {
+    bool idValido = id > 0;
+    bool edadValida = edad >= 0 && edad <= 120;
+    bool saldoValido = saldo >= 0;
+
+    if (!idValido) {
+        std::cout << "ID invalido: debe ser un numero positivo.\n";
+        return;
+    }
+
+    if (!edadValida) {
+        std::cout << "Edad invalida: debe ser un numero positivo mayor a 0.\n";
+        return;
+    }
+
+    if (!saldoValido) {
+        std::cout << "Saldo invalido: no puede ser negativo.\n";
+        return;
+    }
+
     Usuario* nuevo = new Usuario(id, nombre, edad, saldo);
     insertar(raiz, nuevo);
 }
@@ -190,3 +209,23 @@ void ArbolUsuarios::cargarDesdeArchivo(const std::string& nombreArchivo) {
 
     archivo.close();
 }
+
+void ArbolUsuarios::exportarOrdenadosPorNombre(std::ostream& out) {
+    if (!raiz) {
+        out << "No hay usuarios registrados.\n";
+        return;
+    }
+
+    std::map<std::string, Usuario*> mapa;
+    recorrerInOrden(raiz, [&](Usuario* u) {
+        mapa[u->nombre] = u;
+        });
+
+    out << "Usuarios ordenados por nombre:\n";
+    for (auto& par : mapa) {
+        Usuario* u = par.second;
+        out << u->id << " - " << u->nombre << " - " << u->edad
+            << " anios - saldo: " << u->saldo << " colones.\n";
+    }
+}
+
