@@ -1,0 +1,20 @@
+=== REPORTE DE USUARIOS ===
+Usuarios ordenados por nombre:
+601230123 - Evelyn SA - 21 anios - saldo: 250000 colones.
+61590159 - Keit GC - 26 anios - saldo: 160000 colones.
+604560456 - Melany RF - 25 anios - saldo: 236950 colones.
+604940262 - Randall AC - 20 anios - saldo: 160000 colones.
+607890789 - Roger AM - 32 anios - saldo: 495000 colones.
+
+=== MATRIZ DE RUTAS ===
+
+Matriz de adyacencia (distancias en km):
+   SanJose Heredia Alajuela Cartago SanPedro SanRamon Limon Puntarenas 
+SanJose 0 15 20 35 40 INF 65 70 
+Heredia 15 0 18 30 16 INF INF INF 
+Alajuela 20 18 0 25 22 33 INF INF 
+Cartago 35 30 25 0 28 42 INF INF 
+SanPedro 40 16 22 28 0 INF INF INF 
+SanRamon INF INF 33 42 INF 0 INF INF 
+Limon 65 INF INF INF INF INF 0 INF 
+Puntarenas 70 INF INF INF INF INF INF 0 
