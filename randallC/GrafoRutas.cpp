@@ -61,21 +61,7 @@ void GrafoRutas::agregarRuta(const std::string& origen, const std::string& desti
 }
 
 void GrafoRutas::mostrarMatriz() {
-    std::cout << "\nMatriz de adyacencia (distancias en km):\n   ";
-    for (int i = 0; i < cantidad; ++i)
-        std::cout << estaciones[i] << " ";
-    std::cout << "\n";
-
-    for (int i = 0; i < cantidad; ++i) {
-        std::cout << estaciones[i] << " ";
-        for (int j = 0; j < cantidad; ++j) {
-            if (matriz[i][j] == INF)
-                std::cout << "INF ";
-            else
-                std::cout << matriz[i][j] << " ";
-        }
-        std::cout << "\n";
-    }
+    imprimirMatrizAdyacencia(std::cout);
 }
 
 void GrafoRutas::dijkstra(const std::string& origen, const std::string& destino) {
@@ -262,4 +248,22 @@ void GrafoRutas::cargarDesdeArchivo(const std::string& nombreArchivo) {
     }
 
     archivoRutas.close();
+}
+
+void GrafoRutas::imprimirMatrizAdyacencia(std::ostream& out) {
+    out << "\nMatriz de adyacencia (distancias en km):\n   ";
+    for (int i = 0; i < cantidad; ++i)
+        out << estaciones[i] << " ";
+    out << "\n";
+
+    for (int i = 0; i < cantidad; ++i) {
+        out << estaciones[i] << " ";
+        for (int j = 0; j < cantidad; ++j) {
+            if (matriz[i][j] == INF)
+                out << "INF ";
+            else
+                out << matriz[i][j] << " ";
+        }
+        out << "\n";
+    }
 }

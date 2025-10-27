@@ -24,6 +24,7 @@ public:
     void mostrarMatriz();
     void cargarDesdeArchivo(const std::string& nombreArchivo);
     void mostrarEstaciones() const;
+    void imprimirMatrizAdyacencia(std::ostream& out);
 
     void dijkstra(const std::string& origen, const std::string& destino);
     void bfs(const std::string& inicio);
