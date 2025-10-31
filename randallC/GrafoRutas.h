@@ -21,15 +21,17 @@ public:
 
     void agregarEstacion(const std::string& nombre);
     void agregarRuta(const std::string& origen, const std::string& destino, int peso);
-    void mostrarMatriz();
     void cargarDesdeArchivo(const std::string& nombreArchivo);
     void mostrarEstaciones() const;
     void imprimirMatrizAdyacencia(std::ostream& out);
 
-    void dijkstra(const std::string& origen, const std::string& destino);
-    void bfs(const std::string& inicio);
-    void dfs(const std::string& inicio);
-    void prim();
+    std::string dijkstra(const std::string& origen, const std::string& destino);
+    std::string bfs(const std::string& inicio);
+    std::string dfs(const std::string& inicio);
+    std::string prim();
+    std::string mostrarMatriz();
+    bool existeEstacion(const std::string& nombre);
+    std::string obtenerEstacionesComoLinea() const;
 };
 
 #endif
