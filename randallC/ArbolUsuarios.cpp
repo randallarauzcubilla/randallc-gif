@@ -91,7 +91,7 @@ void ArbolUsuarios::eliminarUsuario(int id) {
     raiz = eliminar(raiz, id);
 }
 
-void ArbolUsuarios::recorrerInOrden(Usuario* nodo, std::function<void(Usuario*)> f) {
+void ArbolUsuarios::recorrerInOrden(Usuario* nodo, std::function<void(Usuario*)> f) const {
     if (nodo) {
         recorrerInOrden(nodo->izq, f);
         f(nodo);
@@ -99,7 +99,7 @@ void ArbolUsuarios::recorrerInOrden(Usuario* nodo, std::function<void(Usuario*)>
     }
 }
 
-void ArbolUsuarios::recorrerPreOrden(Usuario* nodo, std::function<void(Usuario*)> f) {
+void ArbolUsuarios::recorrerPreOrden(Usuario* nodo, std::function<void(Usuario*)> f) const {
     if (nodo) {
         f(nodo);
         recorrerPreOrden(nodo->izq, f);
@@ -107,7 +107,7 @@ void ArbolUsuarios::recorrerPreOrden(Usuario* nodo, std::function<void(Usuario*)
     }
 }
 
-void ArbolUsuarios::recorrerPostOrden(Usuario* nodo, std::function<void(Usuario*)> f) {
+void ArbolUsuarios::recorrerPostOrden(Usuario* nodo, std::function<void(Usuario*)> f) const {
     if (nodo) {
         recorrerPostOrden(nodo->izq, f);
         recorrerPostOrden(nodo->der, f);
@@ -229,3 +229,49 @@ void ArbolUsuarios::exportarOrdenadosPorNombre(std::ostream& out) {
     }
 }
 
+std::string ArbolUsuarios::obtenerRecorridoInOrden() const {
+    if (!raiz) return "No hay usuarios registrados.\n";
+
+    std::stringstream ss;
+    recorrerInOrden(raiz, [&](Usuario* u) {
+        ss << u->id << " - " << u->nombre << " - " << u->edad << " años - " << u->saldo << " colones.\n";
+        });
+    return ss.str();
+}
+
+std::string ArbolUsuarios::obtenerRecorridoPreOrden() const {
+    if (!raiz) return "No hay usuarios registrados.\n";
+
+    std::stringstream ss;
+    recorrerPreOrden(raiz, [&](Usuario* u) {
+        ss << u->id << " - " << u->nombre << " - " << u->edad << " años - " << u->saldo << " colones.\n";
+        });
+    return ss.str();
+}
+
+std::string ArbolUsuarios::obtenerRecorridoPostOrden() const {
+    if (!raiz) return "No hay usuarios registrados.\n";
+
+    std::stringstream ss;
+    recorrerPostOrden(raiz, [&](Usuario* u) {
+        ss << u->id << " - " << u->nombre << " - " << u->edad << " años - " << u->saldo << " colones.\n";
+        });
+    return ss.str();
+}
+
+std::string ArbolUsuarios::obtenerUsuariosOrdenadosPorNombre() const {
+    if (!raiz) return "No hay usuarios registrados.\n";
+
+    std::map<std::string, Usuario*> mapa;
+    recorrerInOrden(raiz, [&](Usuario* u) {
+        mapa[u->nombre] = u;
+        });
+
+    std::stringstream ss;
+    ss << "Usuarios ordenados por nombre:\n";
+    for (auto& par : mapa) {
+        Usuario* u = par.second;
+        ss << u->id << " - " << u->nombre << " - " << u->edad << " años - saldo: " << u->saldo << " colones.\n";
+    }
+    return ss.str();
+}
