@@ -1,58 +1,69 @@
 ﻿#include "pch.h"
-using namespace System;
 #include "ArbolUsuarios.h"
 #include "GrafoRutas.h"
+#include "InterfazGrafica.h"
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <algorithm>
 
-// Declaraciones antes del main
+using namespace System;
+using namespace System::Windows::Forms;
+
 void menuUsuarios(ArbolUsuarios& arbol);
 void menuRutas(GrafoRutas& grafo);
 void generarReporte(ArbolUsuarios& arbol, GrafoRutas& grafo);
 bool esNumero(const std::string& texto);
 bool esDecimal(const std::string& texto);
 
-int main() {
-    ArbolUsuarios arbol;
-    arbol.cargarDesdeArchivo("usuarios.txt");
-    GrafoRutas grafo;
-    grafo.cargarDesdeArchivo("rutas.txt");
-    grafo.mostrarEstaciones(); 
-    int opcionPrincipal;
-
-    do {
-        std::cout << "\n--- MENU PRINCIPAL ---\n";
-        std::cout << "1. Gestionar usuarios\n";
-        std::cout << "2. Consultar rutas\n";
-        std::cout << "3. Generar reporte\n";
-        std::cout << "0. Salir\n";
-        std::cout << "Opcion: ";
-        std::cin >> opcionPrincipal;
-
-        switch (opcionPrincipal) {
-        case 1:
-            menuUsuarios(arbol);
-            break;
-        case 2:
-            menuRutas(grafo);
-            break;
-        case 3:
-            generarReporte(arbol, grafo);
-            break;
-        case 0:
-            std::cout << "Saliendo del programa...\n";
-            arbol.guardarEnArchivo("usuarios.txt");
-            break;
-        default:
-            std::cout << "Opcion invalida.\n";
-            break;
-        }
-    } while (opcionPrincipal != 0);
-
-    return 0;
-}
+[STAThreadAttribute]
+//int main(array<String^>^ args) {
+//    ArbolUsuarios arbol;
+//    arbol.cargarDesdeArchivo("usuarios.txt");
+//
+//    GrafoRutas grafo;
+//    grafo.cargarDesdeArchivo("rutas.txt");
+//    grafo.mostrarEstaciones();
+//
+//    int opcionPrincipal;
+//    do {
+//        std::cout << "\n--- MENU PRINCIPAL ---\n";
+//        std::cout << "1. Gestionar usuarios\n";
+//        std::cout << "2. Consultar rutas\n";
+//        std::cout << "3. Generar reporte\n";
+//        std::cout << "4. Abrir interfaz gráfica\n";
+//        std::cout << "0. Salir\n";
+//        std::cout << "Opcion: ";
+//        std::cin >> opcionPrincipal;
+//
+//        switch (opcionPrincipal) {
+//        case 1:
+//            menuUsuarios(arbol);
+//            break;
+//        case 2:
+//            menuRutas(grafo);
+//            break;
+//        case 3:
+//            generarReporte(arbol, grafo);
+//            break;
+//        case 4:
+//            Application::EnableVisualStyles();
+//            Application::SetCompatibleTextRenderingDefault(false);
+//            Application::Run(gcnew randallC::InterfazGrafica());
+//            break;
+//        case 0:
+//            std::cout << "Saliendo del programa...\n";
+//            arbol.guardarEnArchivo("usuarios.txt");
+//            break;
+//        default:
+//            std::cout << "Opcion invalida.\n";
+//            break;
+//        }
+//    } while (opcionPrincipal != 0);
+//
+//    return 0;
+//}
 
 void menuUsuarios(ArbolUsuarios& arbol) {
     int opcion;
