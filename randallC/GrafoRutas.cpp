@@ -49,6 +49,18 @@ void GrafoRutas::mostrarEstaciones() const {
         std::cout << "- " << est << "\n";
 }
 
+std::string GrafoRutas::obtenerEstacionesComoLinea() const {
+    if (estaciones.empty()) return "No hay estaciones cargadas.";
+
+    std::stringstream ss;
+    for (size_t i = 0; i < estaciones.size(); ++i) {
+        ss << estaciones[i];
+        if (i != estaciones.size() - 1)
+            ss << " - ";
+    }
+    return ss.str();
+}
+
 void GrafoRutas::agregarRuta(const std::string& origen, const std::string& destino, int peso) {
     int i = obtenerIndice(origen);
     int j = obtenerIndice(destino);
@@ -60,11 +72,14 @@ void GrafoRutas::agregarRuta(const std::string& origen, const std::string& desti
     matriz[j][i] = peso; // Si es bidireccional
 }
 
-void GrafoRutas::mostrarMatriz() {
-    imprimirMatrizAdyacencia(std::cout);
+std::string GrafoRutas::mostrarMatriz() {
+    std::stringstream ss;
+    imprimirMatrizAdyacencia(ss);
+    return ss.str();
 }
 
-void GrafoRutas::dijkstra(const std::string& origen, const std::string& destino) {
+std::string GrafoRutas::dijkstra(const std::string& origen, const std::string& destino) {
+    std::stringstream ss;
     int n = cantidad;
     std::vector<int> dist(n, INF);
     std::vector<int> previo(n, -1);
@@ -74,18 +89,17 @@ void GrafoRutas::dijkstra(const std::string& origen, const std::string& destino)
     int fin = obtenerIndice(destino);
 
     if (inicio == -1 || fin == -1) {
-        std::cout << "Una o ambas estaciones no existen.\n";
-        return;
+        ss << "Una o ambas estaciones no existen.\n";
+        return ss.str();
     }
 
     dist[inicio] = 0;
 
     for (int i = 0; i < n; ++i) {
         int u = -1;
-        for (int j = 0; j < n; ++j) {
+        for (int j = 0; j < n; ++j)
             if (!visitado[j] && (u == -1 || dist[j] < dist[u]))
                 u = j;
-        }
 
         if (u == -1 || dist[u] == INF) break;
         visitado[u] = true;
@@ -99,34 +113,35 @@ void GrafoRutas::dijkstra(const std::string& origen, const std::string& destino)
     }
 
     if (dist[fin] == INF) {
-        std::cout << "No hay ruta entre " << origen << " y " << destino << ".\n";
-        return;
+        ss << "No hay ruta entre " << origen << " y " << destino << ".\n";
+        return ss.str();
     }
 
-    std::cout << "Distancia minima: " << dist[fin] << " km.\nRuta: ";
+    ss << "Distancia mínima: " << dist[fin] << " km.\nRuta: ";
     std::stack<int> ruta;
     for (int v = fin; v != -1; v = previo[v])
         ruta.push(v);
 
     while (!ruta.empty()) {
-        int idx = ruta.top();
-        ruta.pop();
+        int idx = ruta.top(); ruta.pop();
         if (idx < 0 || idx >= estaciones.size()) {
-            std::cout << "[Error: indice fuera de rango]\n";
-            return;
+            ss << "[Error: índice fuera de rango]\n";
+            return ss.str();
         }
-        std::cout << estaciones[idx];
-        if (!ruta.empty()) std::cout << " -> ";
+        ss << estaciones[idx];
+        if (!ruta.empty()) ss << " -> ";
     }
-    std::cout << "\n";
+    ss << "\n";
+    return ss.str();
 }
 
-void GrafoRutas::bfs(const std::string& inicio) {
+std::string GrafoRutas::bfs(const std::string& inicio) {
+    std::stringstream ss;
     int n = cantidad;
     int idx = obtenerIndice(inicio);
     if (idx == -1) {
-        std::cout << "Estacion no encontrada.\n";
-        return;
+        ss << "Estación no encontrada.\n";
+        return ss.str();
     }
 
     std::vector<bool> visitado(n, false);
@@ -135,12 +150,11 @@ void GrafoRutas::bfs(const std::string& inicio) {
     visitado[idx] = true;
     cola.push(idx);
 
-    std::cout << "Recorrido BFS desde " << inicio << ": ";
+    ss << "Recorrido BFS desde " << inicio << ": ";
 
     while (!cola.empty()) {
-        int u = cola.front();
-        cola.pop();
-        std::cout << estaciones[u] << " ";
+        int u = cola.front(); cola.pop();
+        ss << estaciones[u] << " -> ";
 
         for (int v = 0; v < n; ++v) {
             if (matriz[u][v] != INF && !visitado[v]) {
@@ -149,31 +163,37 @@ void GrafoRutas::bfs(const std::string& inicio) {
             }
         }
     }
-    std::cout << "\n";
+    // Eliminar la última flecha
+    std::string resultado = ss.str();
+    size_t pos = resultado.rfind(" -> ");
+    if (pos != std::string::npos) {
+        resultado.erase(pos, 4);
+    }
+    resultado += "\n";
+    return resultado;
 }
 
-void GrafoRutas::dfs(const std::string& inicio) {
+std::string GrafoRutas::dfs(const std::string& inicio) {
+    std::stringstream ss;
     int n = cantidad;
     int idx = obtenerIndice(inicio);
     if (idx == -1) {
-        std::cout << "Estacion no encontrada.\n";
-        return;
+        ss << "Estación no encontrada.\n";
+        return ss.str();
     }
 
     std::vector<bool> visitado(n, false);
     std::stack<int> pila;
 
     pila.push(idx);
-
-    std::cout << "Recorrido DFS desde " << inicio << ": ";
+    ss << "Recorrido DFS desde " << inicio << ": ";
 
     while (!pila.empty()) {
-        int u = pila.top();
-        pila.pop();
+        int u = pila.top(); pila.pop();
 
         if (!visitado[u]) {
             visitado[u] = true;
-            std::cout << estaciones[u] << " ";
+            ss << estaciones[u] << " -> ";
 
             for (int v = n - 1; v >= 0; --v) {
                 if (matriz[u][v] != INF && !visitado[v]) {
@@ -182,10 +202,18 @@ void GrafoRutas::dfs(const std::string& inicio) {
             }
         }
     }
-    std::cout << "\n";
+    // Eliminar la última flecha
+    std::string resultado = ss.str();
+    size_t pos = resultado.rfind(" -> ");
+    if (pos != std::string::npos) {
+        resultado.erase(pos, 4);
+    }
+    resultado += "\n";
+    return resultado;
 }
 
-void GrafoRutas::prim() {
+std::string GrafoRutas::prim() {
+    std::stringstream ss;
     int n = cantidad;
     std::vector<int> key(n, INF);
     std::vector<bool> mstSet(n, false);
@@ -209,12 +237,13 @@ void GrafoRutas::prim() {
         }
     }
 
-    std::cout << "Arbol de expansion minima (Prim):\n";
+    ss << "Árbol de expansión mínima (Prim):\n";
     for (int i = 1; i < n; ++i) {
         if (padre[i] != -1)
-            std::cout << estaciones[padre[i]] << " - " << estaciones[i]
+            ss << estaciones[padre[i]] << " - " << estaciones[i]
             << " : " << matriz[i][padre[i]] << " km\n";
     }
+    return ss.str();
 }
 
 void GrafoRutas::cargarDesdeArchivo(const std::string& nombreArchivo) {
@@ -266,4 +295,8 @@ void GrafoRutas::imprimirMatrizAdyacencia(std::ostream& out) {
         }
         out << "\n";
     }
+}
+
+bool GrafoRutas::existeEstacion(const std::string& nombre) {
+    return obtenerIndice(nombre) != -1;
 }
