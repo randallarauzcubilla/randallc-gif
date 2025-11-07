@@ -11,26 +11,17 @@ namespace randallC {
 	using namespace System::Data;
 	using namespace System::Drawing;
 
-	/// <summary>
-	/// Resumen de Rutas
-	/// </summary>
 	public ref class Rutas : public System::Windows::Forms::Form
 	{
 	public:
 		Rutas(void)
 		{
 			InitializeComponent();
-			//
-			//TODO: agregar código de constructor aquí
-			//
 			grafo = new GrafoRutas();
 			grafo->cargarDesdeArchivo("rutas.txt");
 		}
 
 	protected:
-		/// <summary>
-		/// Limpiar los recursos que se estén usando.
-		/// </summary>
 		~Rutas()
 		{
 			if (components)
@@ -56,17 +47,12 @@ namespace randallC {
 	private: System::Windows::Forms::Button^ btnVerMatrizAdyacencia;
 
 	private:
-		/// <summary>
-		/// Variable del diseñador necesaria.
-		/// </summary>
 		System::ComponentModel::Container ^components;
-		GrafoRutas* grafo;
+	private: System::Windows::Forms::Panel^ panelGrafoRutas;
+
+		   GrafoRutas* grafo;
 
 #pragma region Windows Form Designer generated code
-		/// <summary>
-		/// Método necesario para admitir el Diseñador. No se puede modificar
-		/// el contenido de este método con el editor de código.
-		/// </summary>
 		void InitializeComponent(void)
 		{
 			this->txtTITULO_RUTAS = (gcnew System::Windows::Forms::Label());
@@ -78,12 +64,13 @@ namespace randallC {
 			this->btnPRIM = (gcnew System::Windows::Forms::Button());
 			this->btnVOLVER = (gcnew System::Windows::Forms::Button());
 			this->mostrarContedinoRUTAS = (gcnew System::Windows::Forms::RichTextBox());
-			this->mostrarContedinoRUTAS->ReadOnly = true;
 			this->btnVerMasCorta = (gcnew System::Windows::Forms::Button());
 			this->btnVerMatrizAdyacencia = (gcnew System::Windows::Forms::Button());
+			this->panelGrafoRutas = (gcnew System::Windows::Forms::Panel());
 			this->SuspendLayout();
-
+			// 
 			// txtTITULO_RUTAS
+			// 
 			this->txtTITULO_RUTAS->AutoSize = true;
 			this->txtTITULO_RUTAS->BackColor = System::Drawing::Color::White;
 			this->txtTITULO_RUTAS->Location = System::Drawing::Point(300, 30);
@@ -92,17 +79,9 @@ namespace randallC {
 			this->txtTITULO_RUTAS->TabIndex = 33;
 			this->txtTITULO_RUTAS->Text = L"MENU DE RUTAS DE TRANSPORTES";
 			this->txtTITULO_RUTAS->Click += gcnew System::EventHandler(this, &Rutas::txtTITULO_RUTAS_Click);
-
-			// btnBFS
-			this->btnBFS->Location = System::Drawing::Point(50, 100);
-			this->btnBFS->Name = L"btnBFS";
-			this->btnBFS->Size = System::Drawing::Size(220, 40);
-			this->btnBFS->TabIndex = 31;
-			this->btnBFS->Text = L"DESDE ESTACIÓN BFS";
-			this->btnBFS->UseVisualStyleBackColor = true;
-			this->btnBFS->Click += gcnew System::EventHandler(this, &Rutas::btnBFS_Click);
-
+			// 
 			// btnDFS
+			// 
 			this->btnDFS->Location = System::Drawing::Point(300, 100);
 			this->btnDFS->Name = L"btnDFS";
 			this->btnDFS->Size = System::Drawing::Size(220, 40);
@@ -110,8 +89,79 @@ namespace randallC {
 			this->btnDFS->Text = L"CAMINOS DFS";
 			this->btnDFS->UseVisualStyleBackColor = true;
 			this->btnDFS->Click += gcnew System::EventHandler(this, &Rutas::btnDFS_Click);
-
+			// 
+			// btnBFS
+			// 
+			this->btnBFS->Location = System::Drawing::Point(50, 100);
+			this->btnBFS->Name = L"btnBFS";
+			this->btnBFS->Size = System::Drawing::Size(220, 40);
+			this->btnBFS->TabIndex = 31;
+			this->btnBFS->Text = L"DESDE ESTACIÓN BFS";
+			this->btnBFS->UseVisualStyleBackColor = true;
+			this->btnBFS->Click += gcnew System::EventHandler(this, &Rutas::btnBFS_Click);
+			// 
+			// btnINFO
+			// 
+			this->btnINFO->Location = System::Drawing::Point(280, 604);
+			this->btnINFO->Name = L"btnINFO";
+			this->btnINFO->Size = System::Drawing::Size(220, 40);
+			this->btnINFO->TabIndex = 30;
+			this->btnINFO->Text = L"USO / RUTAS";
+			this->btnINFO->UseVisualStyleBackColor = true;
+			this->btnINFO->Click += gcnew System::EventHandler(this, &Rutas::btnINFO_Click);
+			// 
+			// txtESTACION_DESTINO
+			// 
+			this->txtESTACION_DESTINO->Location = System::Drawing::Point(565, 544);
+			this->txtESTACION_DESTINO->Name = L"txtESTACION_DESTINO";
+			this->txtESTACION_DESTINO->Size = System::Drawing::Size(282, 22);
+			this->txtESTACION_DESTINO->TabIndex = 29;
+			this->txtESTACION_DESTINO->Text = L"DESTINO";
+			this->txtESTACION_DESTINO->TextChanged += gcnew System::EventHandler(this, &Rutas::txtESTACION_DESTINO_TextChanged);
+			// 
+			// txtESTACION_ORIGEN
+			// 
+			this->txtESTACION_ORIGEN->Location = System::Drawing::Point(282, 544);
+			this->txtESTACION_ORIGEN->Name = L"txtESTACION_ORIGEN";
+			this->txtESTACION_ORIGEN->Size = System::Drawing::Size(262, 22);
+			this->txtESTACION_ORIGEN->TabIndex = 28;
+			this->txtESTACION_ORIGEN->Text = L"ORIGEN";
+			this->txtESTACION_ORIGEN->TextChanged += gcnew System::EventHandler(this, &Rutas::txtESTACION_ORIGEN_TextChanged);
+			// 
+			// btnPRIM
+			// 
+			this->btnPRIM->Location = System::Drawing::Point(32, 604);
+			this->btnPRIM->Name = L"btnPRIM";
+			this->btnPRIM->Size = System::Drawing::Size(220, 40);
+			this->btnPRIM->TabIndex = 27;
+			this->btnPRIM->Text = L"RED MÍNIMA (PRIM)";
+			this->btnPRIM->UseVisualStyleBackColor = true;
+			this->btnPRIM->Click += gcnew System::EventHandler(this, &Rutas::btnPRIM_Click);
+			// 
+			// btnVOLVER
+			// 
+			this->btnVOLVER->BackColor = System::Drawing::Color::Red;
+			this->btnVOLVER->ForeColor = System::Drawing::Color::White;
+			this->btnVOLVER->Location = System::Drawing::Point(540, 604);
+			this->btnVOLVER->Name = L"btnVOLVER";
+			this->btnVOLVER->Size = System::Drawing::Size(220, 40);
+			this->btnVOLVER->TabIndex = 26;
+			this->btnVOLVER->Text = L"VOLVER";
+			this->btnVOLVER->UseVisualStyleBackColor = false;
+			this->btnVOLVER->Click += gcnew System::EventHandler(this, &Rutas::btnVOLVER_Click);
+			// 
+			// mostrarContedinoRUTAS
+			// 
+			this->mostrarContedinoRUTAS->Location = System::Drawing::Point(36, 160);
+			this->mostrarContedinoRUTAS->Name = L"mostrarContedinoRUTAS";
+			this->mostrarContedinoRUTAS->ReadOnly = true;
+			this->mostrarContedinoRUTAS->Size = System::Drawing::Size(811, 365);
+			this->mostrarContedinoRUTAS->TabIndex = 25;
+			this->mostrarContedinoRUTAS->Text = L"";
+			this->mostrarContedinoRUTAS->TextChanged += gcnew System::EventHandler(this, &Rutas::mostrarContedinoRUTAS_TextChanged);
+			// 
 			// btnVerMasCorta
+			// 
 			this->btnVerMasCorta->Location = System::Drawing::Point(550, 100);
 			this->btnVerMasCorta->Name = L"btnVerMasCorta";
 			this->btnVerMasCorta->Size = System::Drawing::Size(220, 40);
@@ -119,73 +169,33 @@ namespace randallC {
 			this->btnVerMasCorta->Text = L"RUTA MÁS CORTA";
 			this->btnVerMasCorta->UseVisualStyleBackColor = true;
 			this->btnVerMasCorta->Click += gcnew System::EventHandler(this, &Rutas::btnVerMasCorta_Click);
-
-			// mostrarContedinoRUTAS
-			this->mostrarContedinoRUTAS->Location = System::Drawing::Point(36, 160);
-			this->mostrarContedinoRUTAS->Name = L"mostrarContedinoRUTAS";
-			this->mostrarContedinoRUTAS->Size = System::Drawing::Size(811, 257);
-			this->mostrarContedinoRUTAS->TabIndex = 25;
-			this->mostrarContedinoRUTAS->Text = L"";
-			this->mostrarContedinoRUTAS->TextChanged += gcnew System::EventHandler(this, &Rutas::mostrarContedinoRUTAS_TextChanged);
-
+			// 
 			// btnVerMatrizAdyacencia
-			this->btnVerMatrizAdyacencia->Location = System::Drawing::Point(36, 440);
+			// 
+			this->btnVerMatrizAdyacencia->Location = System::Drawing::Point(36, 544);
 			this->btnVerMatrizAdyacencia->Name = L"btnVerMatrizAdyacencia";
 			this->btnVerMatrizAdyacencia->Size = System::Drawing::Size(220, 40);
 			this->btnVerMatrizAdyacencia->TabIndex = 23;
 			this->btnVerMatrizAdyacencia->Text = L"MATRIZ ADYACENCIA";
 			this->btnVerMatrizAdyacencia->UseVisualStyleBackColor = true;
 			this->btnVerMatrizAdyacencia->Click += gcnew System::EventHandler(this, &Rutas::btnVerMatrizAdyacencia_Click);
-
-			// txtESTACION_ORIGEN
-			this->txtESTACION_ORIGEN->Location = System::Drawing::Point(282, 440);
-			this->txtESTACION_ORIGEN->Name = L"txtESTACION_ORIGEN";
-			this->txtESTACION_ORIGEN->Size = System::Drawing::Size(262, 22);
-			this->txtESTACION_ORIGEN->TabIndex = 28;
-			this->txtESTACION_ORIGEN->Text = L"ORIGEN";
-			this->txtESTACION_ORIGEN->TextChanged += gcnew System::EventHandler(this, &Rutas::txtESTACION_ORIGEN_TextChanged);
-
-			// txtESTACION_DESTINO
-			this->txtESTACION_DESTINO->Location = System::Drawing::Point(565, 440);
-			this->txtESTACION_DESTINO->Name = L"txtESTACION_DESTINO";
-			this->txtESTACION_DESTINO->Size = System::Drawing::Size(282, 22);
-			this->txtESTACION_DESTINO->TabIndex = 29;
-			this->txtESTACION_DESTINO->Text = L"DESTINO";
-			this->txtESTACION_DESTINO->TextChanged += gcnew System::EventHandler(this, &Rutas::txtESTACION_DESTINO_TextChanged);
-
-			// btnPRIM
-			this->btnPRIM->Location = System::Drawing::Point(32, 500);
-			this->btnPRIM->Name = L"btnPRIM";
-			this->btnPRIM->Size = System::Drawing::Size(220, 40);
-			this->btnPRIM->TabIndex = 27;
-			this->btnPRIM->Text = L"RED MÍNIMA (PRIM)";
-			this->btnPRIM->UseVisualStyleBackColor = true;
-			this->btnPRIM->Click += gcnew System::EventHandler(this, &Rutas::btnPRIM_Click);
-
-			// btnINFO
-			this->btnINFO->Location = System::Drawing::Point(280, 500);
-			this->btnINFO->Name = L"btnINFO";
-			this->btnINFO->Size = System::Drawing::Size(220, 40);
-			this->btnINFO->TabIndex = 30;
-			this->btnINFO->Text = L"USO / RUTAS";
-			this->btnINFO->UseVisualStyleBackColor = true;
-			this->btnINFO->Click += gcnew System::EventHandler(this, &Rutas::btnINFO_Click);
-
-			// btnVOLVER
-			this->btnVOLVER->BackColor = System::Drawing::Color::Red;
-			this->btnVOLVER->ForeColor = System::Drawing::Color::White;
-			this->btnVOLVER->Location = System::Drawing::Point(540, 500);
-			this->btnVOLVER->Name = L"btnVOLVER";
-			this->btnVOLVER->Size = System::Drawing::Size(220, 40);
-			this->btnVOLVER->TabIndex = 26;
-			this->btnVOLVER->Text = L"VOLVER";
-			this->btnVOLVER->UseVisualStyleBackColor = false;
-			this->btnVOLVER->Click += gcnew System::EventHandler(this, &Rutas::btnVOLVER_Click);
-
+			// 
+			// panelGrafoRutas
+			// 
+			this->panelGrafoRutas->BackColor = System::Drawing::SystemColors::Control;
+			this->panelGrafoRutas->Location = System::Drawing::Point(874, 49);
+			this->panelGrafoRutas->Name = L"panelGrafoRutas";
+			this->panelGrafoRutas->Size = System::Drawing::Size(772, 830);
+			this->panelGrafoRutas->TabIndex = 34;
+			this->panelGrafoRutas->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Rutas::panelGrafoRutas_Paint);
+			// 
 			// Rutas
+			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(879, 579);
+			this->BackColor = System::Drawing::Color::LightSteelBlue;
+			this->ClientSize = System::Drawing::Size(1544, 787);
+			this->Controls->Add(this->panelGrafoRutas);
 			this->Controls->Add(this->txtTITULO_RUTAS);
 			this->Controls->Add(this->btnDFS);
 			this->Controls->Add(this->btnBFS);
@@ -199,10 +209,10 @@ namespace randallC {
 			this->Controls->Add(this->btnVerMatrizAdyacencia);
 			this->Name = L"Rutas";
 			this->Text = L"Rutas";
-			this->BackColor = System::Drawing::Color::LightSteelBlue;
 			this->ResumeLayout(false);
 			this->PerformLayout();
-}
+
+		}
 #pragma endregion
 	private: System::Void txtTITULO_RUTAS_Click(System::Object^ sender, System::EventArgs^ e) {
 	}
@@ -294,6 +304,64 @@ private: System::Void btnVOLVER_Click(System::Object^ sender, System::EventArgs^
 private: System::Void txtESTACION_ORIGEN_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 }
 private: System::Void txtESTACION_DESTINO_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void panelGrafoRutas_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
+	Graphics^ g = e->Graphics;
+	int n = grafo->getCantidad(); // método que devuelve cantidad de estaciones
+	if (n == 0) return;
+
+	// Posiciones circulares
+	cli::array<System::Drawing::Point>^ posiciones = gcnew cli::array<System::Drawing::Point>(n);
+	int cx = panelGrafoRutas->Width / 2;
+	int cy = panelGrafoRutas->Height / 2;
+	int radio = 200;
+
+	for (int i = 0; i < n; ++i) {
+		double angulo = 2 * Math::PI * i / n;
+		int x = cx + (int)(radio * Math::Cos(angulo));
+		int y = cy + (int)(radio * Math::Sin(angulo));
+		posiciones[i] = System::Drawing::Point(x, y);
+	}
+
+	// Dibujar aristas con pesos
+	for (int i = 0; i < n; ++i) {
+		for (int j = i + 1; j < n; ++j) {
+			int peso = grafo->getPeso(i, j); // método que devuelve matriz[i][j]
+			if (peso != INF) {
+				g->DrawLine(Pens::Black, posiciones[i], posiciones[j]);
+				int midX = (posiciones[i].X + posiciones[j].X) / 2;
+				int midY = (posiciones[i].Y + posiciones[j].Y) / 2;
+				g->DrawString(
+					peso.ToString(),
+					gcnew System::Drawing::Font("Arial", 8),
+					System::Drawing::Brushes::Red,
+					static_cast<float>(midX),
+					static_cast<float>(midY)
+				);
+			}
+		}
+	}
+
+	// Dibujar nodos
+	for (int i = 0; i < n; ++i) {
+		String^ nombre = gcnew String(grafo->getNombreEstacion(i).c_str());
+		System::Drawing::Font^ fuente = gcnew System::Drawing::Font("Arial", 8);
+		SizeF textoSize = g->MeasureString(nombre, fuente);
+
+		// Aumentar tamaño del nodo según el texto
+		int anchoNodo = Math::Max(40, (int)textoSize.Width + 10);
+		int altoNodo = Math::Max(40, (int)textoSize.Height + 10);
+
+		// Centrar el nodo en la posición
+		System::Drawing::Rectangle nodo(posiciones[i].X - anchoNodo / 2, posiciones[i].Y - altoNodo / 2, anchoNodo, altoNodo);
+		g->FillEllipse(System::Drawing::Brushes::LightBlue, nodo);
+		g->DrawEllipse(System::Drawing::Pens::Black, nodo);
+
+		// Centrar el texto dentro del nodo
+		g->DrawString(nombre, fuente, System::Drawing::Brushes::Black,
+			posiciones[i].X - textoSize.Width / 2,
+			posiciones[i].Y - textoSize.Height / 2);
+	}
 }
 };
 }

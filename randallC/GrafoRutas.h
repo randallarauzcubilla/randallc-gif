@@ -32,6 +32,10 @@ public:
     std::string mostrarMatriz();
     bool existeEstacion(const std::string& nombre);
     std::string obtenerEstacionesComoLinea() const;
+
+    int getCantidad() const { return cantidad; }
+    int getPeso(int i, int j) const { return matriz[i][j]; }
+    std::string getNombreEstacion(int i) const { return estaciones[i]; }
 };
 
 #endif
