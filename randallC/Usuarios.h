@@ -361,7 +361,13 @@ private: void dibujarNodo(Graphics^ g, Usuario* nodo, int x, int y, int xOffset)
 	std::stringstream ss;
 	ss << nodo->id << "\n" << nodo->nombre;
 	String^ texto = gcnew String(ss.str().c_str());
-	g->DrawString(texto, gcnew Drawing::Font("Arial", 8), Brushes::Black, x - 20, y - 10);
+	g->DrawString(
+		texto,
+		gcnew System::Drawing::Font("Arial", 8),
+		System::Drawing::Brushes::Black,
+		static_cast<float>(x - 20),
+		static_cast<float>(y - 10)
+	);
 
 	// Dibujar líneas hacia los hijos y sus nodos recursivamente
 	if (nodo->izq != nullptr)
