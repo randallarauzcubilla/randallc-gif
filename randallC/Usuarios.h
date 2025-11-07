@@ -2,11 +2,9 @@
 #include <string>
 #include "ArbolUsuarios.h"
 #include <sstream>
-#include "InterfazGrafica.h"
 #include <msclr/marshal_cppstd.h>
-
+#include "InterfazGrafica.h" 
 namespace randallC {
-	ref class InterfazGrafica;
 	using namespace System;
 	using namespace System::ComponentModel;
 	using namespace System::Collections;
@@ -315,10 +313,11 @@ private: System::Void Ver_Recorrido_Click(System::Object^ sender, System::EventA
 	mostrarContenido->AppendText(gcnew System::String(resultado.c_str()));
 }
 private: System::Void btnVOLVER_Click(System::Object^ sender, System::EventArgs^ e) {
-	this->Hide();
+	/*this->Hide();
 	randallC::InterfazGrafica^ menu = gcnew randallC::InterfazGrafica();
 	menu->ShowDialog();
-	this->Show();
+	this->Show();*/
+	this->Close();
 }
 private: System::Void txtNombre_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 }

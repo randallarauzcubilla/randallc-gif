@@ -1,9 +1,9 @@
 #pragma once
 #include "GrafoRutas.h"
 #include <msclr/marshal_cppstd.h>
+#include "InterfazGrafica.h" 
 
 namespace randallC {
-	ref class InterfazGrafica;
 	using namespace System;
 	using namespace System::ComponentModel;
 	using namespace System::Collections;
@@ -288,7 +288,9 @@ private: System::Void btnINFO_Click(System::Object^ sender, System::EventArgs^ e
 		mostrarContedinoRUTAS->AppendText("No hay estaciones cargadas actualmente.\n");
 	}
 }
-private: System::Void btnVOLVER_Click(System::Object^ sender, System::EventArgs^ e);
+private: System::Void btnVOLVER_Click(System::Object^ sender, System::EventArgs^ e) {
+	this->Close();
+}
 private: System::Void txtESTACION_ORIGEN_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 }
 private: System::Void txtESTACION_DESTINO_TextChanged(System::Object^ sender, System::EventArgs^ e) {

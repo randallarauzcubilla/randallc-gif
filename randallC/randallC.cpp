@@ -2,7 +2,6 @@
 #include "ArbolUsuarios.h"
 #include "GrafoRutas.h"
 #include "InterfazGrafica.h"
-
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -17,7 +16,17 @@ void generarReporte(ArbolUsuarios& arbol, GrafoRutas& grafo);
 bool esNumero(const std::string& texto);
 bool esDecimal(const std::string& texto);
 
-[STAThreadAttribute]
+using namespace System;
+using namespace System::Windows::Forms;
+
+[STAThread]
+int main(array<String^>^ args) {
+    Application::EnableVisualStyles();
+    Application::SetCompatibleTextRenderingDefault(false);
+    Application::Run(gcnew randallC::InterfazGrafica());
+    return 0;
+}
+
 //int main(array<String^>^ args) {
 //    ArbolUsuarios arbol;
 //    arbol.cargarDesdeArchivo("usuarios.txt");

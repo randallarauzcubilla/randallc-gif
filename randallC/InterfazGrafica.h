@@ -1,8 +1,8 @@
 ﻿#pragma once
+#include "Usuarios.h"
+#include "Rutas.h"
 
 namespace randallC {
-	ref class Usuarios;
-	ref class Rutas;
 	using namespace System;
 	using namespace System::ComponentModel;
 	using namespace System::Collections;
