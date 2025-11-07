@@ -24,6 +24,7 @@ public:
     ArbolUsuarios();
     void insertarUsuario(int id, std::string nombre, int edad, float saldo);
     Usuario* buscarUsuario(int id);
+    Usuario* getRaiz() const { return raiz; }
     void eliminarUsuario(int id);
 
     void mostrarInOrden();
