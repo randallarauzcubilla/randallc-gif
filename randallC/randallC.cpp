@@ -101,9 +101,13 @@ void menuUsuarios(ArbolUsuarios& arbol) {
             }
             id = std::stoi(idStr);
 
+            std::cin.ignore(1000, '\n'); // ignorar hasta 1000 caracteres o hasta salto de línea
             std::cout << "Nombre: ";
-            std::cin.ignore();
             std::getline(std::cin, nombre);
+            if (nombre.empty()) {
+                std::cout << "Nombre invalido: no puede estar vacio.\n";
+                break;
+            }
 
             std::cout << "Edad: ";
             std::cin >> edadStr;
@@ -121,7 +125,14 @@ void menuUsuarios(ArbolUsuarios& arbol) {
             }
             saldo = std::stof(saldoStr);
 
-            arbol.insertarUsuario(id, nombre, edad, saldo);
+            // Intentar insertar y mostrar mensaje según resultado
+            if (arbol.insertarUsuario(id, nombre, edad, saldo)) {
+                std::cout << "Usuario insertado correctamente.\n";
+            }
+            else {
+                std::cout << "No se pudo insertar el usuario.\n";
+            }
+
             break;
         }
 
@@ -225,9 +236,10 @@ void menuRutas(GrafoRutas& grafo) {
             grafo.dfs(inicio);
             break;
         }
-        case 5:
-            grafo.prim();
+        case 5: {
+            grafo.kruskal();
             break;
+        }
         case 0: break;
         default: std::cout << "Opcion invalida.\n"; break;
         }
