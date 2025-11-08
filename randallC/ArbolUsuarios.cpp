@@ -6,40 +6,33 @@
 
 ArbolUsuarios::ArbolUsuarios() : raiz(nullptr) {}
 
-void ArbolUsuarios::insertar(Usuario*& nodo, Usuario* nuevo) {
+bool ArbolUsuarios::insertar(Usuario*& nodo, Usuario* nuevo) {
     if (!nodo) {
         nodo = nuevo;
+        return true;
     }
-    else if (nuevo->id < nodo->id) {
-        insertar(nodo->izq, nuevo);
+
+    if (nuevo->id < nodo->id) {
+        return insertar(nodo->izq, nuevo);
+    }
+    else if (nuevo->id > nodo->id) {
+        return insertar(nodo->der, nuevo);
     }
     else {
-        insertar(nodo->der, nuevo);
+        // ID duplicado
+        delete nuevo;
+        return false;
     }
 }
 
-void ArbolUsuarios::insertarUsuario(int id, std::string nombre, int edad, float saldo) {
-    bool idValido = id > 0;
-    bool edadValida = edad >= 0 && edad <= 120;
-    bool saldoValido = saldo >= 0;
-
-    if (!idValido) {
-        std::cout << "ID invalido: debe ser un numero positivo.\n";
-        return;
-    }
-
-    if (!edadValida) {
-        std::cout << "Edad invalida: debe ser un numero positivo mayor a 0.\n";
-        return;
-    }
-
-    if (!saldoValido) {
-        std::cout << "Saldo invalido: no puede ser negativo.\n";
-        return;
-    }
+bool ArbolUsuarios::insertarUsuario(int id, std::string nombre, int edad, float saldo) {
+    if (id <= 0) return false;
+    if (edad <= 0 || edad > 120) return false;
+    if (saldo < 0) return false;
 
     Usuario* nuevo = new Usuario(id, nombre, edad, saldo);
-    insertar(raiz, nuevo);
+    bool exito = insertar(raiz, nuevo);
+    return exito;
 }
 
 Usuario* ArbolUsuarios::buscar(Usuario* nodo, int id) {
@@ -170,7 +163,7 @@ void ArbolUsuarios::guardarEnArchivo(const std::string& nombreArchivo) {
         return;
     }
 
-    recorrerInOrden(raiz, [&](Usuario* u) {
+    recorrerPreOrden(raiz, [&](Usuario* u) {
         archivo << u->id << "," << u->nombre << "," << u->edad << "," << u->saldo << "\n";
         });
 
