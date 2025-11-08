@@ -40,7 +40,7 @@ namespace randallC {
 	private: System::Windows::Forms::Button^ btnINFO;
 	private: System::Windows::Forms::TextBox^ txtESTACION_DESTINO;
 	private: System::Windows::Forms::TextBox^ txtESTACION_ORIGEN;
-	private: System::Windows::Forms::Button^ btnPRIM;
+	private: System::Windows::Forms::Button^ btnKRUSKAL;
 	private: System::Windows::Forms::Button^ btnVOLVER;
 	private: System::Windows::Forms::RichTextBox^ mostrarContedinoRUTAS;
 	private: System::Windows::Forms::Button^ btnVerMasCorta;
@@ -61,7 +61,7 @@ namespace randallC {
 			this->btnINFO = (gcnew System::Windows::Forms::Button());
 			this->txtESTACION_DESTINO = (gcnew System::Windows::Forms::TextBox());
 			this->txtESTACION_ORIGEN = (gcnew System::Windows::Forms::TextBox());
-			this->btnPRIM = (gcnew System::Windows::Forms::Button());
+			this->btnKRUSKAL = (gcnew System::Windows::Forms::Button());
 			this->btnVOLVER = (gcnew System::Windows::Forms::Button());
 			this->mostrarContedinoRUTAS = (gcnew System::Windows::Forms::RichTextBox());
 			this->btnVerMasCorta = (gcnew System::Windows::Forms::Button());
@@ -128,15 +128,15 @@ namespace randallC {
 			this->txtESTACION_ORIGEN->Text = L"ORIGEN";
 			this->txtESTACION_ORIGEN->TextChanged += gcnew System::EventHandler(this, &Rutas::txtESTACION_ORIGEN_TextChanged);
 			// 
-			// btnPRIM
+			// btnKRUSKAL
 			// 
-			this->btnPRIM->Location = System::Drawing::Point(32, 604);
-			this->btnPRIM->Name = L"btnPRIM";
-			this->btnPRIM->Size = System::Drawing::Size(220, 40);
-			this->btnPRIM->TabIndex = 27;
-			this->btnPRIM->Text = L"RED MÍNIMA (PRIM)";
-			this->btnPRIM->UseVisualStyleBackColor = true;
-			this->btnPRIM->Click += gcnew System::EventHandler(this, &Rutas::btnPRIM_Click);
+			this->btnKRUSKAL->Location = System::Drawing::Point(32, 604);
+			this->btnKRUSKAL->Name = L"btnKRUSKAL";
+			this->btnKRUSKAL->Size = System::Drawing::Size(220, 40);
+			this->btnKRUSKAL->TabIndex = 27;
+			this->btnKRUSKAL->Text = L"RED MÍNIMA (KRUSKAL)";
+			this->btnKRUSKAL->UseVisualStyleBackColor = true;
+			this->btnKRUSKAL->Click += gcnew System::EventHandler(this, &Rutas::btnKRUSKAL_Click);
 			// 
 			// btnVOLVER
 			// 
@@ -202,7 +202,7 @@ namespace randallC {
 			this->Controls->Add(this->btnINFO);
 			this->Controls->Add(this->txtESTACION_DESTINO);
 			this->Controls->Add(this->txtESTACION_ORIGEN);
-			this->Controls->Add(this->btnPRIM);
+			this->Controls->Add(this->btnKRUSKAL);
 			this->Controls->Add(this->btnVOLVER);
 			this->Controls->Add(this->mostrarContedinoRUTAS);
 			this->Controls->Add(this->btnVerMasCorta);
@@ -275,11 +275,13 @@ private: System::Void btnVerMatrizAdyacencia_Click(System::Object^ sender, Syste
 	std::string resultado = grafo->mostrarMatriz();
 	mostrarContedinoRUTAS->AppendText(gcnew String(resultado.c_str()));
 }
-private: System::Void btnPRIM_Click(System::Object^ sender, System::EventArgs^ e) {
+
+private: System::Void btnKRUSKAL_Click(System::Object^ sender, System::EventArgs^ e) {
 	mostrarContedinoRUTAS->Clear();
-	std::string resultado = grafo->prim();
+	std::string resultado = grafo->kruskal();
 	mostrarContedinoRUTAS->AppendText(gcnew String(resultado.c_str()));
 }
+
 private: System::Void btnINFO_Click(System::Object^ sender, System::EventArgs^ e) {
 	mostrarContedinoRUTAS->Clear();
 	mostrarContedinoRUTAS->AppendText(
