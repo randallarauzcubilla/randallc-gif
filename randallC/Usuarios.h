@@ -253,6 +253,7 @@ private: System::Void btnEliminarUsuario_Click(System::Object^ sender, System::E
 			System::String^ reporte = gcnew System::String(arbol->obtenerUsuariosOrdenadosPorNombre().c_str());
 			System::IO::File::WriteAllText("reportes.txt", reporte);
 			panelArbolUsuarios->Invalidate();
+			txtID->Text = "IngreseID";
 		}
 		else {
 			mostrarContenido->AppendText("No se encontró ningún usuario con ese ID.\n");
@@ -273,6 +274,7 @@ private: System::Void btnBUSCAR_USUARIO_ID_Click(System::Object^ sender, System:
 			std::stringstream ss;
 			ss << u->id << " - " << u->nombre << " - " << u->edad << " años - " << u->saldo << " colones.\n";
 			mostrarContenido->AppendText(gcnew System::String(ss.str().c_str()));
+			txtID->Text = "IngreseID";
 		}
 		else {
 			mostrarContenido->AppendText("Usuario no encontrado.\n");
@@ -292,13 +294,25 @@ private: System::Void btnInsertarUsuario_Click(System::Object^ sender, System::E
 		float saldo = Convert::ToSingle(txtSaldo->Text);
 
 		std::string nombreStr = msclr::interop::marshal_as<std::string>(nombre);
-		arbol->insertarUsuario(id, nombreStr, edad, saldo);
 
-		mostrarContenido->AppendText("Usuario insertado correctamente.\n");
-		arbol->guardarEnArchivo("usuarios.txt");
-		System::String^ reporte = gcnew System::String(arbol->obtenerUsuariosOrdenadosPorNombre().c_str());
-		System::IO::File::WriteAllText("reportes.txt", reporte);
-		panelArbolUsuarios->Invalidate();
+		// Intentar insertar y verificar éxito
+		bool exito = arbol->insertarUsuario(id, nombreStr, edad, saldo);
+
+		if (exito) {
+			mostrarContenido->AppendText("Usuario insertado correctamente.\n");
+			arbol->guardarEnArchivo("usuarios.txt");
+			System::String^ reporte = gcnew System::String(arbol->obtenerUsuariosOrdenadosPorNombre().c_str());
+			System::IO::File::WriteAllText("reportes.txt", reporte);
+			// Actualizar los campos de entrada
+			txtID->Text = "IngreseID";
+			txtNombre->Text = "IngreseNombre";
+			txtEdad->Text = "IngreseEdad";
+			txtSaldo->Text = "IngreseSaldo";
+			panelArbolUsuarios->Invalidate();
+		}
+		else {
+			mostrarContenido->AppendText("Error al insertar usuario: ID duplicado, edad o saldo inválidos.\n");
+		}
 	}
 	catch (...) {
 		mostrarContenido->AppendText("Error: verifique que los campos sean válidos.\n");
