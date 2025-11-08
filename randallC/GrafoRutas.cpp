@@ -6,6 +6,9 @@
 #include <stack>
 #include <fstream>
 #include <sstream>
+#include <algorithm>
+#include <tuple>
+#include <functional>
 
 GrafoRutas::GrafoRutas() {
     cantidad = 0;
@@ -135,6 +138,7 @@ std::string GrafoRutas::dijkstra(const std::string& origen, const std::string& d
     return ss.str();
 }
 
+
 std::string GrafoRutas::bfs(const std::string& inicio) {
     std::stringstream ss;
     int n = cantidad;
@@ -153,16 +157,30 @@ std::string GrafoRutas::bfs(const std::string& inicio) {
     ss << "Recorrido BFS desde " << inicio << ": ";
 
     while (!cola.empty()) {
-        int u = cola.front(); cola.pop();
+        int u = cola.front();
+        cola.pop();
+
         ss << estaciones[u] << " -> ";
 
+        // Crear lista de vecinos con pesos
+        std::vector<std::pair<int, int>> vecinos; // {peso, índice}
         for (int v = 0; v < n; ++v) {
             if (matriz[u][v] != INF && !visitado[v]) {
-                visitado[v] = true;
-                cola.push(v);
+                vecinos.push_back({ matriz[u][v], v });
             }
         }
+
+        // Ordenar por peso ascendente
+        std::sort(vecinos.begin(), vecinos.end());
+
+        // Encolar en orden de menor peso
+        for (auto& par : vecinos) {
+            int v = par.second;
+            visitado[v] = true;
+            cola.push(v);
+        }
     }
+
     // Eliminar la última flecha
     std::string resultado = ss.str();
     size_t pos = resultado.rfind(" -> ");
@@ -170,6 +188,7 @@ std::string GrafoRutas::bfs(const std::string& inicio) {
         resultado.erase(pos, 4);
     }
     resultado += "\n";
+
     return resultado;
 }
 
@@ -195,13 +214,24 @@ std::string GrafoRutas::dfs(const std::string& inicio) {
             visitado[u] = true;
             ss << estaciones[u] << " -> ";
 
-            for (int v = n - 1; v >= 0; --v) {
+            // Recolectar vecinos no visitados con sus pesos
+            std::vector<std::pair<int, int>> vecinos;
+            for (int v = 0; v < n; ++v) {
                 if (matriz[u][v] != INF && !visitado[v]) {
-                    pila.push(v);
+                    vecinos.push_back({ matriz[u][v], v }); // (peso, índice)
                 }
+            }
+
+            // Ordenar por peso ascendente
+            std::sort(vecinos.begin(), vecinos.end());
+
+            // Insertar en pila en orden inverso (último en entrar será el primero en salir)
+            for (int i = static_cast<int>(vecinos.size()) - 1; i >= 0; --i) {
+                pila.push(vecinos[i].second);
             }
         }
     }
+
     // Eliminar la última flecha
     std::string resultado = ss.str();
     size_t pos = resultado.rfind(" -> ");
@@ -212,37 +242,56 @@ std::string GrafoRutas::dfs(const std::string& inicio) {
     return resultado;
 }
 
-std::string GrafoRutas::prim() {
+std::string GrafoRutas::kruskal() {
     std::stringstream ss;
     int n = cantidad;
-    std::vector<int> key(n, INF);
-    std::vector<bool> mstSet(n, false);
-    std::vector<int> padre(n, -1);
+    std::vector<std::tuple<int, int, int>> aristas;
 
-    key[0] = 0;
-
-    for (int count = 0; count < n - 1; ++count) {
-        int u = -1;
-        for (int i = 0; i < n; ++i)
-            if (!mstSet[i] && (u == -1 || key[i] < key[u]))
-                u = i;
-
-        mstSet[u] = true;
-
-        for (int v = 0; v < n; ++v) {
-            if (matriz[u][v] != INF && !mstSet[v] && matriz[u][v] < key[v]) {
-                padre[v] = u;
-                key[v] = matriz[u][v];
+    // Recolectar todas las aristas (sin duplicar)
+    for (int i = 0; i < n; ++i) {
+        for (int j = i + 1; j < n; ++j) {
+            if (matriz[i][j] != INF) {
+                aristas.push_back(std::make_tuple(matriz[i][j], i, j));
             }
         }
     }
 
-    ss << "Árbol de expansión mínima (Prim):\n";
-    for (int i = 1; i < n; ++i) {
-        if (padre[i] != -1)
-            ss << estaciones[padre[i]] << " - " << estaciones[i]
-            << " : " << matriz[i][padre[i]] << " km\n";
+    // Ordenar por peso ascendente
+    std::sort(aristas.begin(), aristas.end());
+
+    // Estructura Union-Find
+    std::vector<int> padre(n);
+    for (int i = 0; i < n; ++i) padre[i] = i;
+    std::function<int(int)> encontrar = [&](int x) {
+        if (padre[x] != x)
+            padre[x] = encontrar(padre[x]);
+        return padre[x];
+    };
+
+    auto unir = [&](int x, int y) {
+        int raizX = encontrar(x);
+        int raizY = encontrar(y);
+        if (raizX != raizY) {
+            padre[raizY] = raizX;
+            return true;
+        }
+        return false;
+        };
+
+    int costoTotal = 0;
+    ss << "Árbol de expansión mínima (Kruskal):\n";
+    for (const auto& t : aristas) {
+        int peso = std::get<0>(t);
+        int u = std::get<1>(t);
+        int v = std::get<2>(t);
+
+        if (unir(u, v)) {
+            ss << estaciones[u] << " - " << estaciones[v] << " : " << peso << " km\n";
+            costoTotal += peso;
+        }
     }
+
+    ss << "Costo total del árbol: " << costoTotal << " km\n";
     return ss.str();
 }
 
