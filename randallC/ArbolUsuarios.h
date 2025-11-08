@@ -11,7 +11,7 @@ class ArbolUsuarios {
 private:
     Usuario* raiz;
 
-    void insertar(Usuario*& nodo, Usuario* nuevo);
+    bool insertar(Usuario*& nodo, Usuario* nuevo);
     Usuario* buscar(Usuario* nodo, int id);
     Usuario* eliminar(Usuario* nodo, int id);
     Usuario* encontrarMinimo(Usuario* nodo);
@@ -22,7 +22,7 @@ private:
 
 public:
     ArbolUsuarios();
-    void insertarUsuario(int id, std::string nombre, int edad, float saldo);
+    bool insertarUsuario(int id, std::string nombre, int edad, float saldo);
     Usuario* buscarUsuario(int id);
     Usuario* getRaiz() const { return raiz; }
     void eliminarUsuario(int id);
