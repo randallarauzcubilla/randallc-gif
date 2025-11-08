@@ -28,7 +28,7 @@ public:
     std::string dijkstra(const std::string& origen, const std::string& destino);
     std::string bfs(const std::string& inicio);
     std::string dfs(const std::string& inicio);
-    std::string prim();
+    std::string GrafoRutas::kruskal();
     std::string mostrarMatriz();
     bool existeEstacion(const std::string& nombre);
     std::string obtenerEstacionesComoLinea() const;
